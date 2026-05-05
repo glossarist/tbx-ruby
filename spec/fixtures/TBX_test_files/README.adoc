@@ -1,0 +1,24 @@
+= TBX Test Files
+
+These test files are sourced from the
+https://github.com/LTAC-Global/TBX_test_files[TBX_test_files] repository
+maintained by https://ltac-global.org[LTAC Global].
+
+== Purpose
+
+These files demonstrate TBX validation across different dialect levels:
+
+* `core_structure_good.tbx` / `core_structure_bad.tbx` -- TBX core structure validation
+* `min_good.tbx` / `min_bad.tbx` -- TBX-Min dialect validation
+* `basic_good.tbx` / `basic_bad.tbx` -- TBX-Basic dialect validation
+* `poorly_formed_xml.tbx` -- general XML well-formedness check
+
+== License
+
+These test files are made available by LTAC Global for testing and validation
+purposes. See the upstream repository for license details.
+
+== Acknowledgments
+
+Thank you to LTAC Global for making these test files publicly available for
+the TBX community.
