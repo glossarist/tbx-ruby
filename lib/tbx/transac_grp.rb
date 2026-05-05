@@ -13,7 +13,7 @@ module Tbx
     xml do
       root "transacGrp"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "id", to: :id
       map_element "transac", to: :transac

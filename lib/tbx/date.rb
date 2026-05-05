@@ -7,7 +7,7 @@ module Tbx
 
     xml do
       root "date"
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "id", to: :id
       map_content to: :content

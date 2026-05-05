@@ -6,7 +6,7 @@ module Tbx
 
     xml do
       root "ph"
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "type", to: :type
     end

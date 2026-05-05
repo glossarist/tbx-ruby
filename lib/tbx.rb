@@ -4,7 +4,7 @@ require "lutaml/model"
 require_relative "tbx/version"
 
 module Tbx
-  autoload :Namespaces, "#{__dir__}/tbx/namespaces"
+  autoload :Namespace, "#{__dir__}/tbx/namespace"
 
   # Inline elements
   autoload :Ec, "#{__dir__}/tbx/ec"

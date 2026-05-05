@@ -17,7 +17,7 @@ module Tbx
     xml do
       root "termNote"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "id", to: :id
       w3c_attributes :lang

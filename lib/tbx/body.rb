@@ -8,7 +8,7 @@ module Tbx
     xml do
       root "body"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "id", to: :id
       map_element "conceptEntry", to: :concept_entry

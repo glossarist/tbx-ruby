@@ -14,7 +14,7 @@ module Tbx
     xml do
       root "termNoteGrp"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "id", to: :id
       map_element "termNote", to: :term_note

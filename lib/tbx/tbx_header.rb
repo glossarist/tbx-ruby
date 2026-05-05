@@ -10,7 +10,7 @@ module Tbx
     xml do
       root "tbxHeader"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "id", to: :id
       map_element "fileDesc", to: :file_desc

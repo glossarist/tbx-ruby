@@ -15,7 +15,7 @@ module Tbx
     xml do
       root "descripGrp"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "id", to: :id
       map_element "descrip", to: :descrip

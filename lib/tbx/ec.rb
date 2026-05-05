@@ -13,7 +13,7 @@ module Tbx
 
     xml do
       root "ec"
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "startRef", to: :start_ref
       map_attribute "isolated", to: :isolated

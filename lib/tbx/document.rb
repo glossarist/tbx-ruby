@@ -11,7 +11,7 @@ module Tbx
     xml do
       root "tbx"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       w3c_attributes :lang
       map_attribute "type", to: :type

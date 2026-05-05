@@ -9,7 +9,7 @@ module Tbx
     xml do
       root "term"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "id", to: :id
       map_content to: :content
