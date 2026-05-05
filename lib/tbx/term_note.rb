@@ -2,6 +2,16 @@
 
 module Tbx
   class TermNote < Lutaml::Model::Serializable
+    # Standard DCA termNote type values per ISO 30042:2019
+    TYPES = {
+      usage_status: "usageStatus",
+      term_type: "termType",
+      grammatical_gender: "grammaticalGender",
+      grammatical_number: "grammaticalNumber",
+      part_of_speech: "partOfSpeech",
+      entailed_term: "entailedTerm",
+    }.freeze
+
     attribute :id, :string
     attribute :lang, Lutaml::Xml::W3c::XmlLangType
     attribute :target, :string
@@ -30,6 +40,14 @@ module Tbx
       map_element "foreign", to: :foreign
       map_element "ph", to: :ph
       map_element "sc", to: :sc
+    end
+
+    class << self
+      def entailed_term(target:, content: nil)
+        opts = { type: TYPES[:entailed_term], target: target }
+        opts[:content] = [content] if content
+        new(**opts)
+      end
     end
   end
 end
