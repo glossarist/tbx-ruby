@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module Tbx
+  # A set of items forming a picklist `<itemSet>`.
+  #
+  # Contains `itemGrp` or `item` children that enumerate individual
+  # picklist values.
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="itemSet">`
   class ItemSet < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :type, :string

@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Item group `<itemGrp>` associating a picklist item with administrative data.
+  #
+  # Groups an `item` with its associated administrative data, notes,
+  # references, and transaction records.
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="itemGrp">`
   class ItemGrp < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :item, ::Tbx::Item

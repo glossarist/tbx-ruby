@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Groups a `<termNote>` with its associated administrative data and
+  # references.
+  #
+  # Children: `termNote` (required), then entity.noteLinkInfo (admin,
+  # adminGrp, note, ref, transacGrp, xref).
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="termNoteGrp">`
   class TermNoteGrp < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :term_note, ::Tbx::TermNote

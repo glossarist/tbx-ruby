@@ -1,13 +1,24 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Internal reference element `<ref>`.
+  #
+  # Used for cross-references within the same termbase. The `target`
+  # attribute holds an IDREF pointing to another element's `id`.
+  #
+  # Permitted `type` values:
+  #
+  # * Basic module: `crossReference` — reference to another concept entry
+  #   in the same termbase (DC-164), level: conceptEntry/termSec
+  #
+  # Content is plain text only (no inline elements per the core RNG).
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="ref">`;
+  # data category: Basic.tbxmd.
   class Ref < Lutaml::Model::Serializable
-    attribute :id, :string
-    attribute :lang, Lutaml::Xml::W3c::XmlLangType
-    attribute :target, :string
-    attribute :datatype, :string
-    attribute :type, :string
-    attribute :content, :string, collection: true
+    include Tbx::DataElement
+
+    TYPES = Modules::Basic::REF_TYPES.freeze
 
     xml do
       root "ref"

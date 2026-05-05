@@ -1,0 +1,109 @@
+= Reference Documentation
+
+This directory contains official TBX schema, dialect, and module reference
+files from https://ltac-global.org[LTAC Global] (LTAC-Global on GitHub).
+
+== Source repositories
+
+All files below are sourced from the
+https://github.com/LTAC-Global[LTAC-Global GitHub organization] and are
+used under their respective licenses for reference purposes.
+
+=== Dialects
+
+Dialects define a specific profile of TBX with Schematron constraints,
+RELAX NG schemas, and example files.
+
+|===
+| Directory | Source repository | Description
+
+| `schemas/TBX-Basic_dialect_v1/`
+| https://github.com/LTAC-Global/TBX-Basic_dialect[TBX-Basic_dialect]
+| TBX-Basic dialect (DCA + DCT schemas, example files, bundled modules)
+
+| `schemas/TBX-Min_dialect/`
+| https://github.com/LTAC-Global/TBX-Min_dialect[TBX-Min_dialect]
+| TBX-Min dialect (DCA + DCT Schematron, NVDL)
+
+| `schemas/TBX-Core_dialect/`
+| https://github.com/LTAC-Global/TBX-Core_dialect[TBX-Core_dialect]
+| TBX-Core dialect (integrated RNG, Schematron, example)
+
+| `schemas/TBX-Linguist_dialect/`
+| https://github.com/LTAC-Global/TBX-Linguist_dialect[TBX-Linguist_dialect]
+| TBX-Linguist dialect (DCA + DCT Schematron, integrated RNG, examples)
+|===
+
+=== Modules
+
+Modules define data categories and structural rules for a specific level
+of terminological detail.
+
+|===
+| Directory | Source repository | Key files
+
+| `schemas/TBX-Basic_dialect_v1/Modules/TBX_min_module/`
+| https://github.com/LTAC-Global/TBX_min_module[TBX_min_module]
+| `Min.rng`, `Min.sch`, `Min.tbxmd`
+
+| `schemas/TBX-Basic_dialect_v1/Modules/TBX_basic_module/`
+| https://github.com/LTAC-Global/TBX_basic_module[TBX_basic_module]
+| `Basic.rng`, `Basic.sch`, `Basic.tbxmd`
+
+| `schemas/TBX_linguist_module/`
+| https://github.com/LTAC-Global/TBX_linguist_module[TBX_linguist_module]
+| `Linguist.rng`, `Linguist.sch`, `Linguist.tbxmd`
+
+| `schemas/TBX_termComp_module/`
+| https://github.com/LTAC-Global/TBX_termComp_module[TBX_termComp_module]
+| `TermComp-namespace.rng`
+|===
+
+=== Core schema
+
+|===
+| File | Source repository | Description
+
+| `schemas/TBXcoreStructV03.rng`
+| https://github.com/LTAC-Global/TBX_core_module[TBX_core_module]
+| TBX core structural RELAX NG schema
+
+| `schemas/TBX_core.xsd`
+| https://github.com/LTAC-Global/TBX_core_module[TBX_core_module]
+| TBX core XML Schema (XSD)
+|===
+
+=== Module description format
+
+|===
+| Directory | Source repository | Key files
+
+| `schemas/TBX_module_description_xml/`
+| https://github.com/LTAC-Global/TBX_module_description_xml[TBX_module_description_xml]
+| `tbxmd.rng` -- RELAX NG schema for `.tbxmd` module definition files
+|===
+
+=== Implementation guide
+
+|===
+| Directory | Source repository | Key files
+
+| `schemas/TBX-Basic_ImplementationGuide/`
+| https://github.com/LTAC-Global/TBX-Basic_ImplementationGuide[TBX-Basic_ImplementationGuide]
+| `TBX-Basic_ImplementationGuide.pdf`
+|===
+
+== TBX module hierarchy
+
+The TBX standard (ISO 30042:2019) defines a modular architecture:
+
+....
+TBX-Core          structural foundation (element definitions)
+  +-- TBX-Min     minimal data categories for basic terminology
+  +-- TBX-Basic   standard data categories for general terminology
+  +-- TBX-Linguist  extended data categories for linguistic detail
+  +-- TBX-TermComp  term composition and decomposition
+....
+
+Each dialect (TBX-Min, TBX-Basic, etc.) combines the core structure with
+one or more modules and adds dialect-specific Schematron constraints.

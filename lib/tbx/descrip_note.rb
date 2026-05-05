@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Note element associated with a `<descrip>` description.
+  #
+  # Content is plain text only (no inline elements per the core RNG).
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="descripNote">`
   class DescripNote < Lutaml::Model::Serializable
-    attribute :id, :string
-    attribute :lang, Lutaml::Xml::W3c::XmlLangType
-    attribute :target, :string
-    attribute :datatype, :string
-    attribute :type, :string
-    attribute :content, :string, collection: true
+    include Tbx::DataElement
 
     xml do
       root "descripNote"

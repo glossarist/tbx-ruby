@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Document header `<tbxHeader>`.
+  #
+  # Contains file description, encoding information, and revision history.
+  # Children: `fileDesc` (required), `encodingDesc` (optional),
+  # `revisionDesc` (optional).
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="tbxHeader">`
   class TbxHeader < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :file_desc, ::Tbx::FileDesc

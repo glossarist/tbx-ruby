@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Wrapper element `<text>` for the termbase body and back matter.
+  #
+  # Children: `body` (optional), `back` (optional).
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="text">`
   class TextElement < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :body, ::Tbx::Body

@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Groups an `<admin>` element with its associated notes and references.
+  #
+  # Children: `admin` (required), then adminNote, note, ref, xref.
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="adminGrp">`
   class AdminGrp < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :admin, ::Tbx::Admin

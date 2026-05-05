@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Paragraph element `<p>`.
+  #
+  # Used for prose text in header contexts (publicationStmt, sourceDesc,
+  # encodingDesc, change).
+  #
+  # Content model: `entity.noteText` (mixed text + inline elements hi, ec,
+  # foreign, ph, sc).
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="p">`
   class P < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :lang, Lutaml::Xml::W3c::XmlLangType

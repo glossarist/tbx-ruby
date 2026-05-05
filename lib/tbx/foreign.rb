@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Foreign-language text element `<foreign>`.
+  #
+  # Marks text in a foreign language. The `xml:lang` attribute indicates
+  # the language. Content model: `entity.noteText` (mixed text + inline
+  # elements).
+  # Schema source: TBXcoreStructV03.rng `<define name="foreign">`
   class Foreign < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :lang, Lutaml::Xml::W3c::XmlLangType

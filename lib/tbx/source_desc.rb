@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Source description `<sourceDesc>`.
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="sourceDesc">`
   class SourceDesc < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :lang, Lutaml::Xml::W3c::XmlLangType

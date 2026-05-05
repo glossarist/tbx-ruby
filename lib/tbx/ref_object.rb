@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module Tbx
+  # A reference object `<refObject>` defining a picklist or value set.
+  #
+  # Contains `itemSet`, `itemGrp`, or `item` children that enumerate the
+  # permitted values for a data category's picklist.
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="refObject">`
   class RefObject < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :item_set, ::Tbx::ItemSet, collection: true

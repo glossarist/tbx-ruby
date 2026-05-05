@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module Tbx
+  # A single picklist value item `<item>`.
+  #
+  # Content model: `entity.noteText` (mixed text + inline elements:
+  # hi, ec, foreign, ph, sc).
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="item">`
   class Item < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :type, :string

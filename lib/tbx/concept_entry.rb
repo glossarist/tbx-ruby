@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 module Tbx
+  # A single concept entry `<conceptEntry>`.
+  #
+  # Represents a concept in the terminology collection. The `id` attribute
+  # is required and must be unique within the document.
+  #
+  # Permitted children are defined by the `entity.auxInfo` pattern:
+  # admin, adminGrp, descrip, descripGrp, note, ref, transacGrp, xref,
+  # followed by one or more langSec elements.
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="conceptEntry">`
   class ConceptEntry < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :admin, ::Tbx::Admin, collection: true

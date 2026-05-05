@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Encoding description `<encodingDesc>`.
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="encodingDesc">`
   class EncodingDesc < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :p, ::Tbx::P, collection: true

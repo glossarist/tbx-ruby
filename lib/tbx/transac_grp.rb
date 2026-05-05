@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Groups a `<transac>` transaction element with its date and
+  # responsibility information.
+  #
+  # Children: `transac` (required), then date, note, ref, transacNote, xref.
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="transacGrp">`
   class TransacGrp < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :transac, ::Tbx::Transac
