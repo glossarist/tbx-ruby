@@ -72,8 +72,7 @@ Tbx
 ├── Sc               # <sc>
 ├── Ph               # <ph>
 ├── Title            # <title>
-├── Namespaces       # XML namespace definitions
-└── Ruby             # Gem namespace (Tbx::Ruby::VERSION)
+└── Namespace         # XML namespace definition (urn:iso:std:iso:30042:ed-2)
 ```
 
 ### Key Implementation Patterns
@@ -95,7 +94,7 @@ module Tbx
     xml do
       root "conceptEntry"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "id", to: :id
       map_element "langSec", to: :lang_sec
@@ -108,7 +107,7 @@ end
 
 ### XML Namespace
 
-The TBX namespace is `urn:iso:std:iso:30042:ed-2` defined in `Tbx::Namespaces::TbxNamespace`.
+The TBX namespace is `urn:iso:std:iso:30042:ed-2` defined in `Tbx::Namespace`.
 
 ### TBX Styles
 

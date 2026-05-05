@@ -8,7 +8,7 @@ module Tbx
     xml do
       root "back"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "id", to: :id
       map_element "refObjectSec", to: :ref_object_sec

@@ -16,7 +16,7 @@ module Tbx
     xml do
       root "conceptEntry"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "id", to: :id
       map_element "admin", to: :admin

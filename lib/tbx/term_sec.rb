@@ -18,7 +18,7 @@ module Tbx
     xml do
       root "termSec"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "id", to: :id
       map_element "term", to: :term

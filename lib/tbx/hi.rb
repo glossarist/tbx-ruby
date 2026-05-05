@@ -9,7 +9,7 @@ module Tbx
     xml do
       root "hi"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "target", to: :target
       map_attribute "type", to: :type

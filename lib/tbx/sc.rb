@@ -10,7 +10,7 @@ module Tbx
 
     xml do
       root "sc"
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       map_attribute "id", to: :id
       map_attribute "isolated", to: :isolated

@@ -16,7 +16,7 @@ module Tbx
     xml do
       root "langSec"
       mixed_content
-      namespace ::Tbx::Namespaces::TbxNamespace
+      namespace ::Tbx::Namespace
 
       w3c_attributes :lang
       map_element "admin", to: :admin
