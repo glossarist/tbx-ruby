@@ -1,13 +1,24 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Transaction note element `<transacNote>`.
+  #
+  # Provides additional information about a transaction, typically identifying
+  # the person or organization responsible.
+  #
+  # Permitted `type` values:
+  #
+  # * Basic module: `responsibility` — person/org responsible for the
+  #   transaction (DC-451)
+  #
+  # Content is plain text only (no inline elements per the core RNG).
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="transacNote">`;
+  # data category: Basic.tbxmd.
   class TransacNote < Lutaml::Model::Serializable
-    attribute :id, :string
-    attribute :lang, Lutaml::Xml::W3c::XmlLangType
-    attribute :target, :string
-    attribute :datatype, :string
-    attribute :type, :string
-    attribute :content, :string, collection: true
+    include Tbx::DataElement
+
+    TYPES = Modules::Basic::TRANSAC_NOTE_TYPES.freeze
 
     xml do
       root "transacNote"

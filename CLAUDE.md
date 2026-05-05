@@ -45,6 +45,9 @@ Tbx
 ├── LangSec          # <langSec>
 ├── TermSec          # <termSec>
 ├── Term             # <term>
+├── TermComp         # <termComp> (TermComp module)
+├── TermCompGrp      # <termCompGrp> (TermComp module)
+├── TermCompSec      # <termCompSec> (TermComp module)
 ├── TermNote         # <termNote>
 ├── TermNoteGrp      # <termNoteGrp>
 ├── Descrip          # <descrip>
@@ -72,7 +75,13 @@ Tbx
 ├── Sc               # <sc>
 ├── Ph               # <ph>
 ├── Title            # <title>
-└── Namespace         # XML namespace definition (urn:iso:std:iso:30042:ed-2)
+├── DataElement      # Shared concern for data-category elements
+├── Namespace        # XML namespace (urn:iso:std:iso:30042:ed-2)
+└── Modules
+    ├── Min          # Min module TYPES/VALUES
+    ├── Basic        # Basic module TYPES/VALUES
+    ├── Linguist     # Linguist module TYPES/VALUES
+    └── CoreTypes    # Core RNG hi types
 ```
 
 ### Key Implementation Patterns
@@ -104,6 +113,17 @@ end
 ```
 
 **Autoload Pattern**: Elements are autoloaded via `lib/tbx.rb`. When adding new elements, add autoloads in alphabetical order.
+
+**DataElement Concern** (`lib/tbx/data_element.rb`):
+- `Tbx::DataElement` — injects shared attributes (id, lang, target, datatype, type, content) via `self.included(base)` hook
+- `Tbx::DataElement::InlineContent` — adds inline child attributes (hi, ec, foreign, ph, sc) for elements with `entity.noteText` content
+- XML mappings remain explicit per class (lutaml-model's `xml do` uses `instance_eval` on a separate context)
+- Included by: Admin, Descrip, TermNote (with InlineContent); AdminNote, DescripNote, TransacNote, Transac, Ref (without)
+
+**Module TYPES/VALUES** (`lib/tbx/modules/`):
+- Each module defines `*_TYPES` and `*_VALUES` hashes keyed by Ruby symbol, valued by TBX string
+- Element classes compose TYPES via `merge` from all applicable modules (e.g., `TermNote::TYPES` merges Min + Basic + Linguist)
+- Source: Min.tbxmd, Basic.tbxmd, Linguist.tbxmd, TBXcoreStructV03.rng
 
 ### XML Namespace
 

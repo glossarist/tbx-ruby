@@ -1,13 +1,21 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Administrative note element `<adminNote>`.
+  #
+  # Provides notes about administrative data. Content is plain text only
+  # (no inline elements per the core RNG).
+  #
+  # Permitted `type` values:
+  #
+  # * Linguist module: `readingNote` — note about a term's reading/pronunciation
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="adminNote">`;
+  # data category: Linguist.tbxmd.
   class AdminNote < Lutaml::Model::Serializable
-    attribute :id, :string
-    attribute :lang, Lutaml::Xml::W3c::XmlLangType
-    attribute :target, :string
-    attribute :datatype, :string
-    attribute :type, :string
-    attribute :content, :string, collection: true
+    include Tbx::DataElement
+
+    TYPES = Modules::Linguist::ADMIN_NOTE_TYPES.freeze
 
     xml do
       root "adminNote"

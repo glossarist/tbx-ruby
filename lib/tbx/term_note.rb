@@ -1,28 +1,51 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Term-level data category element `<termNote>`.
+  #
+  # Carries grammatical, administrative, and usage information about a term.
+  # Only allowed as a child of `<termSec>` or `<termNoteGrp>`.
+  #
+  # Permitted `type` values (composed from all modules):
+  #
+  # * Min module: `administrativeStatus` (picklist: admittedTerm-admn-sts,
+  #   deprecatedTerm-admn-sts, supersededTerm-admn-sts, preferredTerm-admn-sts),
+  #   `partOfSpeech` (picklist: adjective, noun, other, verb, adverb)
+  # * Basic module: `geographicalUsage` (string), `grammaticalGender`
+  #   (picklist: masculine, feminine, neuter, other), `termLocation`
+  #   (picklist: 18 UI element types), `termType` (picklist: fullForm,
+  #   acronym, abbreviation, shortForm, variant, phrase)
+  # * Linguist module: `grammaticalNumber` (picklist: singular, plural, dual,
+  #   mass, otherNumber), `register` (picklist: colloquialRegister,
+  #   neutralRegister, technicalRegister, in-houseRegister,
+  #   bench-levelRegister, slangRegister, vulgarRegister),
+  #   `transferComment` (string)
+  #
+  # Content model: `entity.noteText` (mixed text + inline elements hi, ec,
+  # foreign, ph, sc).
+  #
+  # @see TYPES
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="termNote">`;
+  # data categories: Min.tbxmd, Basic.tbxmd, Linguist.tbxmd;
+  # permitted types validated by DCA Schematron (e.g. TBX-Basic_DCA.sch).
   class TermNote < Lutaml::Model::Serializable
-    # Standard DCA termNote type values per ISO 30042:2019
-    TYPES = {
-      usage_status: "usageStatus",
-      term_type: "termType",
-      grammatical_gender: "grammaticalGender",
-      grammatical_number: "grammaticalNumber",
-      part_of_speech: "partOfSpeech",
-      entailed_term: "entailedTerm",
-    }.freeze
+    include Tbx::DataElement
+    include Tbx::DataElement::InlineContent
 
-    attribute :id, :string
-    attribute :lang, Lutaml::Xml::W3c::XmlLangType
-    attribute :target, :string
-    attribute :datatype, :string
-    attribute :type, :string
-    attribute :content, :string, collection: true
-    attribute :hi, ::Tbx::Hi, collection: true
-    attribute :ec, ::Tbx::Ec, collection: true
-    attribute :foreign, ::Tbx::Foreign, collection: true
-    attribute :ph, ::Tbx::Ph, collection: true
-    attribute :sc, ::Tbx::Sc, collection: true
+    # Permitted termNote/@type values per TBX-Basic DCA Schematron
+    # (ISO 30042:2019, TBX-Basic dialect, DCA style).
+    #
+    # Source: reference-docs/schemas/TBX-Basic_DCA.sch line 54-56
+    #   "Permitted type value(s): administrativeStatus, partOfSpeech,
+    #    geographicalUsage, grammaticalGender, termLocation, termType"
+    TYPES = Modules::Min::TERM_NOTE_TYPES
+      .merge(Modules::Basic::TERM_NOTE_TYPES)
+      .merge(Modules::Linguist::TERM_NOTE_TYPES).freeze
+
+    VALUES = Modules::Min::TERM_NOTE_VALUES
+      .merge(Modules::Basic::TERM_NOTE_VALUES)
+      .merge(Modules::Linguist::TERM_NOTE_VALUES).freeze
 
     xml do
       root "termNote"
@@ -40,14 +63,6 @@ module Tbx
       map_element "foreign", to: :foreign
       map_element "ph", to: :ph
       map_element "sc", to: :sc
-    end
-
-    class << self
-      def entailed_term(target:, content: nil)
-        opts = { type: TYPES[:entailed_term], target: target }
-        opts[:content] = [content] if content
-        new(**opts)
-      end
     end
   end
 end

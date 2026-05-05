@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Generic note element `<note>`.
+  #
+  # Provides supplementary information at conceptEntry, langSec, termSec,
+  # and various group levels.
+  #
+  # Content model: `entity.noteText` (mixed text + inline elements hi, ec,
+  # foreign, ph, sc).
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="note">`
   class Note < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :lang, Lutaml::Xml::W3c::XmlLangType

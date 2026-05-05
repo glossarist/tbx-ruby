@@ -89,44 +89,386 @@ tbx.to_xml
 tbx.to_xml(pretty: true, declaration: true, encoding: "utf-8")
 ----
 
-=== Supported TBX elements
+=== Using TYPES and VALUES constants
 
-==== Root and structure
+Each data-category element class exposes `TYPES` (permitted `@type` values)
+and `VALUES` (permitted picklist values) constants composed from the
+TBX module definitions:
 
-`Document` (`<tbx>`), `TbxHeader`, `TextElement`, `Body`, `Back`
+[source,ruby]
+----
+# Permitted termNote types across all modules
+Tbx::TermNote::TYPES
+# => { administrative_status: "administrativeStatus", part_of_speech: "partOfSpeech",
+#      geographical_usage: "geographicalUsage", grammatical_gender: "grammaticalGender",
+#      term_location: "termLocation", term_type: "termType",
+#      grammatical_number: "grammaticalNumber", register: "register",
+#      transfer_comment: "transferComment" }
 
-==== Terminological entries
+# Picklist values for a specific type
+Tbx::TermNote::VALUES[:grammatical_gender]
+# => { masculine: "masculine", feminine: "feminine", neuter: "neuter", other: "other" }
 
-`ConceptEntry`, `LangSec`, `TermSec`, `Term`
+# Admin types from all modules
+Tbx::Admin::TYPES
+# => { customer_subset: "customerSubset", project_subset: "projectSubset",
+#      source: "source", reading: "reading" }
 
-==== Data categories
+# Descrip types
+Tbx::Descrip::TYPES
+# => { subject_field: "subjectField", context: "context", definition: "definition" }
 
-`Admin`, `AdminGrp`, `AdminNote`, `Descrip`, `DescripGrp`, `DescripNote`,
-`TermNote`, `TermNoteGrp`, `Ref`, `Xref`
+# Hi types from core RNG
+Tbx::Hi::TYPES
+# => { entailed_term: "entailedTerm", hotkey: "hotkey", italics: "italics",
+#      bold: "bold", superscript: "superscript", subscript: "subscript", math: "math" }
 
-==== Transactions
+# Create validated elements using constants
+note = Tbx::TermNote.new(
+  type: Tbx::TermNote::TYPES[:part_of_speech],
+  content: [Tbx::TermNote::VALUES[:part_of_speech][:noun]],
+)
+----
 
-`Transac`, `TransacGrp`, `TransacNote`, `DateElement`
+== Supported TBX elements
 
-==== Header
+=== Structural elements (TBXcoreStructV03.rng)
 
-`FileDesc`, `PublicationStmt`, `TitleStmt`, `SourceDesc`, `EncodingDesc`,
-`RevisionDesc`, `Change`
+[cols="2,3,3",options="header"]
+|===
+| Ruby class | TBX element | Schema source
 
-==== Reference objects
+| `Tbx::Document` | `<tbx>` | Core RNG `<define name="tbx">`
+| `Tbx::TbxHeader` | `<tbxHeader>` | Core RNG `<define name="tbxHeader">`
+| `Tbx::TextElement` | `<text>` | Core RNG `<define name="text">`
+| `Tbx::Body` | `<body>` | Core RNG `<define name="body">`
+| `Tbx::Back` | `<back>` | Core RNG `<define name="back">`
+| `Tbx::ConceptEntry` | `<conceptEntry>` | Core RNG `<define name="conceptEntry">`
+| `Tbx::LangSec` | `<langSec>` | Core RNG `<define name="langSec">`
+| `Tbx::TermSec` | `<termSec>` | Core RNG `<define name="termSec">`
+| `Tbx::Term` | `<term>` | Core RNG `<define name="term">`
+|===
 
-`RefObjectSec`, `RefObject`, `ItemSet`, `ItemGrp`, `Item`
+=== Header elements (TBXcoreStructV03.rng)
 
-==== Inline
+[cols="2,3,3",options="header"]
+|===
+| Ruby class | TBX element | Schema source
 
-`Hi`, `Foreign`, `Ec`, `Sc`, `Ph`, `Note`, `P`, `Title`
+| `Tbx::FileDesc` | `<fileDesc>` | Core RNG `<define name="fileDesc">`
+| `Tbx::PublicationStmt` | `<publicationStmt>` | Core RNG `<define name="publicationStmt">`
+| `Tbx::TitleStmt` | `<titleStmt>` | Core RNG `<define name="titleStmt">`
+| `Tbx::SourceDesc` | `<sourceDesc>` | Core RNG `<define name="sourceDesc">`
+| `Tbx::EncodingDesc` | `<encodingDesc>` | Core RNG `<define name="encodingDesc">`
+| `Tbx::RevisionDesc` | `<revisionDesc>` | Core RNG `<define name="revisionDesc">`
+| `Tbx::Change` | `<change>` | Core RNG `<define name="change">`
+| `Tbx::Title` | `<title>` | Core RNG `<define name="title">`
+|===
+
+=== Data category elements with TYPES constants
+
+These elements carry a `type` attribute whose permitted values are defined
+by the active TBX module composition. The `TYPES` constant on each class
+contains the union of all applicable module types.
+
+==== Admin element
+
+[cols="1,2,2,3",options="header"]
+|===
+| Module | Type value | Content | Source
+
+| Min | `customerSubset` | string | Min.tbxmd (DC-165)
+| Basic | `projectSubset` | string | Basic.tbxmd (DC-406)
+| Basic | `source` | string | Basic.tbxmd (DC-471)
+| Linguist | `reading` | string | Linguist.tbxmd
+|===
+
+==== AdminNote element
+
+[cols="1,2,2,3",options="header"]
+|===
+| Module | Type value | Content | Source
+
+| Linguist | `readingNote` | noteText | Linguist.tbxmd
+|===
+
+==== Descrip element
+
+[cols="1,2,2,3",options="header"]
+|===
+| Module | Type value | Content | Source
+
+| Min | `subjectField` | string | Min.tbxmd (DC-489)
+| Basic | `context` | noteText | Basic.tbxmd (DC-149)
+| Basic | `definition` | noteText | Basic.tbxmd (DC-168)
+|===
+
+==== TermNote element
+
+[cols="1,2,2,3",options="header"]
+|===
+| Module | Type value | Content | Source
+
+| Min | `administrativeStatus` | picklist footnote:[admittedTerm-admn-sts, deprecatedTerm-admn-sts, supersededTerm-admn-sts, preferredTerm-admn-sts] | Min.tbxmd (DC-168)
+| Min | `partOfSpeech` | picklist footnote:[adjective, noun, other, verb, adverb] | Min.tbxmd (DC-396)
+| Basic | `geographicalUsage` | string | Basic.tbxmd (DC-243)
+| Basic | `grammaticalGender` | picklist footnote:[masculine, feminine, neuter, other] | Basic.tbxmd (DC-245)
+| Basic | `termLocation` | picklist footnote:[18 UI element types: checkBox, comboBox, comboBoxElement, dialogBox, groupBox, informativeMessage, interactiveMessage, menuItem, progressBar, pushButton, radioButton, slider, spinBox, tab, tableText, textBox, toolTip, user-definedType] | Basic.tbxmd (DC-1823)
+| Basic | `termType` | picklist footnote:[fullForm, acronym, abbreviation, shortForm, variant, phrase] | Basic.tbxmd (DC-2677)
+| Linguist | `grammaticalNumber` | picklist footnote:[singular, plural, dual, mass, otherNumber] | Linguist.tbxmd (DC-251)
+| Linguist | `register` | picklist footnote:[colloquialRegister, neutralRegister, technicalRegister, in-houseRegister, bench-levelRegister, slangRegister, vulgarRegister] | Linguist.tbxmd (DC-423)
+| Linguist | `transferComment` | string | Linguist.tbxmd (DC-520)
+|===
+
+==== Transac element
+
+[cols="1,2,2,3",options="header"]
+|===
+| Module | Type value | Values | Source
+
+| Basic | `transactionType` | picklist footnote:[origination, modification] | Basic.tbxmd (DC-1689)
+|===
+
+==== TransacNote element
+
+[cols="1,2,2,3",options="header"]
+|===
+| Module | Type value | Content | Source
+
+| Basic | `responsibility` | string | Basic.tbxmd (DC-451)
+|===
+
+==== Ref element
+
+[cols="1,2,2,3",options="header"]
+|===
+| Module | Type value | Content | Source
+
+| Basic | `crossReference` | string | Basic.tbxmd (DC-164)
+|===
+
+==== Xref element
+
+[cols="1,2,2,3",options="header"]
+|===
+| Module | Type value | Content | Source
+
+| Min | `externalCrossReference` | string | TBX-Min DCA Schematron
+| Basic | `externalCrossReference` | string | Basic.tbxmd (DC-226)
+| Basic | `xGraphic` | string | Basic.tbxmd (DC-2920)
+|===
+
+==== Hi element (core RNG, not module-specific)
+
+[cols="2,3",options="header"]
+|===
+| Type value | Description
+
+| `entailedTerm` | Cross-reference to another concept within term text
+| `hotkey` | Keyboard shortcut designation
+| `italics` | Italic text emphasis
+| `bold` | Bold text emphasis
+| `superscript` | Superscript text
+| `subscript` | Subscript text
+| `math` | Mathematical notation
+|===
+
+=== Grouping elements (TBXcoreStructV03.rng)
+
+[cols="2,3,3",options="header"]
+|===
+| Ruby class | TBX element | Schema source
+
+| `Tbx::AdminGrp` | `<adminGrp>` | Core RNG `<define name="adminGrp">`
+| `Tbx::DescripGrp` | `<descripGrp>` | Core RNG `<define name="descripGrp">`
+| `Tbx::DescripNote` | `<descripNote>` | Core RNG `<define name="descripNote">`
+| `Tbx::TermNoteGrp` | `<termNoteGrp>` | Core RNG `<define name="termNoteGrp">`
+| `Tbx::TransacGrp` | `<transacGrp>` | Core RNG `<define name="transacGrp">`
+| `Tbx::TransacNote` | `<transacNote>` | Core RNG `<define name="transacNote">`
+| `Tbx::DateElement` | `<date>` | Core RNG `<define name="date">`
+|===
+
+=== TermComp elements (TermComp-namespace.rng)
+
+[cols="2,3,3",options="header"]
+|===
+| Ruby class | TBX element | Schema source
+
+| `Tbx::TermCompSec` | `<termCompSec>` | TermComp-namespace.rng `<define name="termCompSec">`
+| `Tbx::TermCompGrp` | `<termCompGrp>` | TermComp-namespace.rng `<define name="termCompGrp">`
+| `Tbx::TermComp` | `<termComp>` | TermComp-namespace.rng `<define name="termComp">`
+|===
+
+`Tbx::TermCompSec::TYPES` defines 5 decomposition types:
+`hyphenation`, `lemma`, `morphologicalElement`, `syllabification`, `termElement`.
+
+=== Reference object elements (TBXcoreStructV03.rng)
+
+[cols="2,3,3",options="header"]
+|===
+| Ruby class | TBX element | Schema source
+
+| `Tbx::RefObjectSec` | `<refObjectSec>` | Core RNG `<define name="refObjectSec">`
+| `Tbx::RefObject` | `<refObject>` | Core RNG `<define name="refObject">`
+| `Tbx::ItemSet` | `<itemSet>` | Core RNG `<define name="itemSet">`
+| `Tbx::ItemGrp` | `<itemGrp>` | Core RNG `<define name="itemGrp">`
+| `Tbx::Item` | `<item>` | Core RNG `<define name="item">`
+|===
+
+=== Inline and text elements (TBXcoreStructV03.rng)
+
+[cols="2,3,3",options="header"]
+|===
+| Ruby class | TBX element | Schema source
+
+| `Tbx::Hi` | `<hi>` | Core RNG `<define name="hi">`
+| `Tbx::Foreign` | `<foreign>` | Core RNG `<define name="foreign">`
+| `Tbx::Ec` | `<ec>` | Core RNG `<define name="ec">`
+| `Tbx::Sc` | `<sc>` | Core RNG `<define name="sc">`
+| `Tbx::Ph` | `<ph>` | Core RNG `<define name="ph">`
+| `Tbx::Note` | `<note>` | Core RNG `<define name="note">`
+| `Tbx::P` | `<p>` | Core RNG `<define name="p">`
+|===
+
+== Module architecture
+
+TBX modules define sets of data categories. Dialects compose modules to
+determine which `@type` values are permitted on each element.
+
+=== Modules and dialects
+
+[cols="1,4,3",options="header"]
+|===
+| Module | Dialects that include it | Source files
+
+| Min | TBX-Min, TBX-Basic, TBX-Core, TBX-Linguist | `Min.tbxmd`, `Min.rng`, `Min.sch`
+| Basic | TBX-Basic, TBX-Linguist | `Basic.tbxmd`, `Basic.rng`, `Basic.sch`
+| Linguist | TBX-Linguist | `Linguist.tbxmd`, `Linguist.rng`, `Linguist.sch`
+| TermComp | (add-on for any dialect) | `TermComp-namespace.rng`
+| Core | TBX-Core | `TBXcoreStructV03.rng`
+|===
+
+=== Ruby module constants
+
+[cols="2,3,5",options="header"]
+|===
+| Ruby module | Constants | Source schema
+
+| `Tbx::Modules::Min` | `ADMIN_TYPES`, `DESCRIP_TYPES`, `TERM_NOTE_TYPES`, `TERM_NOTE_VALUES`, `XREF_TYPES` | Min.tbxmd
+| `Tbx::Modules::Basic` | `ADMIN_TYPES`, `DESCRIP_TYPES`, `TERM_NOTE_TYPES`, `TERM_NOTE_VALUES`, `REF_TYPES`, `XREF_TYPES`, `TRANSAC_TYPES`, `TRANSAC_VALUES`, `TRANSAC_NOTE_TYPES` | Basic.tbxmd
+| `Tbx::Modules::Linguist` | `ADMIN_TYPES`, `ADMIN_NOTE_TYPES`, `TERM_NOTE_TYPES`, `TERM_NOTE_VALUES` | Linguist.tbxmd
+| `Tbx::Modules::CoreTypes` | `HI_TYPES` | TBXcoreStructV03.rng
+|===
+
+Element classes compose these via `merge`:
+
+[cols="2,3",options="header"]
+|===
+| Element class | TYPES composition
+
+| `Tbx::Admin` | Min::ADMIN_TYPES + Basic::ADMIN_TYPES + Linguist::ADMIN_TYPES
+| `Tbx::AdminNote` | Linguist::ADMIN_NOTE_TYPES
+| `Tbx::Descrip` | Min::DESCRIP_TYPES + Basic::DESCRIP_TYPES
+| `Tbx::TermNote` | Min::TERM_NOTE_TYPES + Basic::TERM_NOTE_TYPES + Linguist::TERM_NOTE_TYPES
+| `Tbx::Ref` | Basic::REF_TYPES
+| `Tbx::Xref` | Min::XREF_TYPES + Basic::XREF_TYPES
+| `Tbx::Transac` | Basic::TRANSAC_TYPES
+| `Tbx::TransacNote` | Basic::TRANSAC_NOTE_TYPES
+| `Tbx::Hi` | CoreTypes::HI_TYPES
+| `Tbx::TermCompSec` | (self-contained: hyphenation, lemma, morphologicalElement, syllabification, termElement)
+|===
+
+=== Shared concern
+
+`Tbx::DataElement` is a module that injects common attributes (id, lang,
+target, datatype, type, content) via `self.included(base)`.
+`Tbx::DataElement::InlineContent` adds inline child attributes (hi, ec,
+foreign, ph, sc) for elements with `entity.noteText` content.
+
+[cols="2,2",options="header"]
+|===
+| Element classes | Includes InlineContent?
+| `Admin`, `Descrip`, `TermNote` | Yes (entity.noteText content)
+| `AdminNote`, `DescripNote`, `TransacNote`, `Transac`, `Ref` | No (plain text only per RNG)
+|===
+
+== Schema source audit
+
+Every element class in `lib/tbx/` has YARD documentation tracing it to its
+schema source. The authoritative sources are:
+
+[cols="2,5",options="header"]
+|===
+| Source file | Defines
+
+| `TBXcoreStructV03.rng` | All structural elements, attributes, content models, and `hi` type values
+| `Min.tbxmd` | Min module data categories: customerSubset, subjectField, administrativeStatus, partOfSpeech, externalCrossReference
+| `Basic.tbxmd` | Basic module data categories: projectSubset, source, context, definition, geographicalUsage, grammaticalGender, termLocation, termType, crossReference, externalCrossReference, xGraphic, transactionType, responsibility
+| `Linguist.tbxmd` | Linguist module data categories: reading, readingNote, grammaticalNumber, register, transferComment
+| `TermComp-namespace.rng` | TermComp elements (termComp, termCompGrp, termCompSec) and type values
+| `TBX-Basic_DCA.sch` | TBX-Basic DCA Schematron: permitted `@type` values, picklist value constraints, level constraints
+| `TBX-Min_DCA.sch` | TBX-Min DCA Schematron
+| `TBX-Linguist_DCA.sch` | TBX-Linguist DCA Schematron
+| `TBX-Core.sch` | TBX-Core Schematron
+| `Basic.rng` / `Min.rng` / `Linguist.rng` | Module-level structural extensions
+| `Basic.sch` / `Min.sch` / `Linguist.sch` | Module-level Schematron rules
+|===
+
+== Reference documentation
+
+The `reference-docs/` directory contains official TBX schema, dialect, and
+module files from https://ltac-global.org[LTAC Global]. See
+link:reference-docs/README.adoc[reference-docs/README.adoc] for a complete
+inventory with source repository links.
+
+=== Official LTAC-Global repositories
+
+|===
+| Repository | Description
+
+| https://github.com/LTAC-Global/TBX_core_module[TBX_core_module]
+| Core structural schema (`TBXcoreStructV03.rng`)
+
+| https://github.com/LTAC-Global/TBX_min_module[TBX_min_module]
+| Min module data categories (RNG, Schematron, `.tbxmd`)
+
+| https://github.com/LTAC-Global/TBX_basic_module[TBX_basic_module]
+| Basic module data categories (RNG, Schematron, `.tbxmd`)
+
+| https://github.com/LTAC-Global/TBX_linguist_module[TBX_linguist_module]
+| Linguist module data categories (RNG, Schematron, `.tbxmd`)
+
+| https://github.com/LTAC-Global/TBX_termComp_module[TBX_termComp_module]
+| Term composition module (namespace RNG)
+
+| https://github.com/LTAC-Global/TBX_module_description_xml[TBX_module_description_xml]
+| `.tbxmd` format schema (`tbxmd.rng`)
+
+| https://github.com/LTAC-Global/TBX-Min_dialect[TBX-Min_dialect]
+| TBX-Min dialect (DCA + DCT Schematron, NVDL)
+
+| https://github.com/LTAC-Global/TBX-Basic_dialect[TBX-Basic_dialect]
+| TBX-Basic dialect (DCA + DCT Schematron, bundled modules)
+
+| https://github.com/LTAC-Global/TBX-Core_dialect[TBX-Core_dialect]
+| TBX-Core dialect (integrated RNG, Schematron)
+
+| https://github.com/LTAC-Global/TBX-Linguist_dialect[TBX-Linguist_dialect]
+| TBX-Linguist dialect (DCA + DCT Schematron, integrated RNG)
+
+| https://github.com/LTAC-Global/TBX-Basic_ImplementationGuide[TBX-Basic_ImplementationGuide]
+| TBX-Basic implementation guide
+
+| https://github.com/LTAC-Global/TBX_test_files[TBX_test_files]
+| Official TBX test fixture files
+|===
 
 == Test data
 
 Test fixtures are sourced from the
 https://github.com/LTAC-Global/TBX_test_files[TBX_test_files] repository
-maintained by https://ltac-global.org[LTAC Global], and from the TBX-Basic
-dialect schemas included in `reference-docs/`.
+maintained by https://ltac-global.org[LTAC Global], and from the dialect
+schemas and example files in `reference-docs/`.
 
 == Development
 
@@ -149,6 +491,10 @@ bundle exec rake
 
 This gem is developed, maintained and funded by
 https://www.ribose.com[Ribose Inc.]
+
+TBX schema, dialect, and module reference files are maintained by
+https://ltac-global.org[LTAC Global] and sourced from the
+https://github.com/LTAC-Global[LTAC-Global GitHub organization].
 
 == License
 

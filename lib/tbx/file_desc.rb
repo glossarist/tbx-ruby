@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module Tbx
+  # File description `<fileDesc>`.
+  #
+  # Contains file-level metadata including publication statement, title,
+  # and source description.
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="fileDesc">`
   class FileDesc < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :publication_stmt, ::Tbx::PublicationStmt

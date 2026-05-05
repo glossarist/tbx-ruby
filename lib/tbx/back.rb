@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Back matter `<back>` containing reference object sections.
+  #
+  # Used for managing picklists and external references.
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="back">`
   class Back < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :ref_object_sec, ::Tbx::RefObjectSec, collection: true

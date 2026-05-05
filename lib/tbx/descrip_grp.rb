@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Groups a `<descrip>` element with its administrative data, notes, and
+  # source references.
+  #
+  # Commonly used to associate a `source` admin with a `definition` descrip,
+  # providing provenance for descriptive data.
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="descripGrp">`
   class DescripGrp < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :descrip, ::Tbx::Descrip

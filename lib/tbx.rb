@@ -4,6 +4,13 @@ require "lutaml/model"
 require_relative "tbx/version"
 
 module Tbx
+  module Modules
+    autoload :Min, "#{__dir__}/tbx/modules/min"
+    autoload :Basic, "#{__dir__}/tbx/modules/basic"
+    autoload :Linguist, "#{__dir__}/tbx/modules/linguist"
+    autoload :CoreTypes, "#{__dir__}/tbx/modules/core_types"
+  end
+
   autoload :Namespace, "#{__dir__}/tbx/namespace"
 
   # Inline elements
@@ -17,6 +24,9 @@ module Tbx
   autoload :Note, "#{__dir__}/tbx/note"
   autoload :P, "#{__dir__}/tbx/p"
   autoload :Title, "#{__dir__}/tbx/title"
+
+  # Shared concerns
+  autoload :DataElement, "#{__dir__}/tbx/data_element"
 
   # Data elements
   autoload :Admin, "#{__dir__}/tbx/admin"
@@ -45,6 +55,9 @@ module Tbx
 
   # Structural elements
   autoload :Term, "#{__dir__}/tbx/term"
+  autoload :TermComp, "#{__dir__}/tbx/term_comp"
+  autoload :TermCompGrp, "#{__dir__}/tbx/term_comp_grp"
+  autoload :TermCompSec, "#{__dir__}/tbx/term_comp_sec"
   autoload :TermSec, "#{__dir__}/tbx/term_sec"
   autoload :LangSec, "#{__dir__}/tbx/lang_sec"
   autoload :ConceptEntry, "#{__dir__}/tbx/concept_entry"

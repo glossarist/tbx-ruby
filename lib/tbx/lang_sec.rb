@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Language section `<langSec>`.
+  #
+  # Groups all term-level data for a single language within a concept entry.
+  # The `xml:lang` attribute is required and specifies the language.
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="langSec">`
   class LangSec < Lutaml::Model::Serializable
     attribute :lang, Lutaml::Xml::W3c::XmlLangType
     attribute :admin, ::Tbx::Admin, collection: true

@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Term section `<termSec>`.
+  #
+  # Contains a single term designation and its associated term-level notes
+  # and administrative data. Children: `term` (required), then
+  # termNote/termNoteGrp, then auxInfo elements (admin, adminGrp, descrip,
+  # descripGrp, note, ref, transacGrp, xref).
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="termSec">`
   class TermSec < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :term, ::Tbx::Term

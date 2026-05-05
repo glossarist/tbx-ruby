@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Tbx
+  # Revision description `<revisionDesc>`.
+  #
+  # Schema source: TBXcoreStructV03.rng `<define name="revisionDesc">`
   class RevisionDesc < Lutaml::Model::Serializable
     attribute :id, :string
     attribute :lang, Lutaml::Xml::W3c::XmlLangType

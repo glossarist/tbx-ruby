@@ -4,91 +4,95 @@ require "spec_helper"
 
 RSpec.describe Tbx::TermNote do
   describe "TYPES constants" do
-    it "defines usageStatus type" do
-      expect(described_class::TYPES[:usage_status]).to eq("usageStatus")
-    end
-
-    it "defines termType type" do
-      expect(described_class::TYPES[:term_type]).to eq("termType")
-    end
-
-    it "defines grammaticalGender type" do
-      expect(described_class::TYPES[:grammatical_gender]).to eq("grammaticalGender")
-    end
-
-    it "defines grammaticalNumber type" do
-      expect(described_class::TYPES[:grammatical_number]).to eq("grammaticalNumber")
+    it "defines administrativeStatus type" do
+      expect(described_class::TYPES[:administrative_status])
+        .to eq("administrativeStatus")
     end
 
     it "defines partOfSpeech type" do
-      expect(described_class::TYPES[:part_of_speech]).to eq("partOfSpeech")
+      expect(described_class::TYPES[:part_of_speech])
+        .to eq("partOfSpeech")
     end
 
-    it "defines entailedTerm type" do
-      expect(described_class::TYPES[:entailed_term]).to eq("entailedTerm")
+    it "defines geographicalUsage type" do
+      expect(described_class::TYPES[:geographical_usage])
+        .to eq("geographicalUsage")
+    end
+
+    it "defines grammaticalGender type" do
+      expect(described_class::TYPES[:grammatical_gender])
+        .to eq("grammaticalGender")
+    end
+
+    it "defines termLocation type" do
+      expect(described_class::TYPES[:term_location])
+        .to eq("termLocation")
+    end
+
+    it "defines termType type" do
+      expect(described_class::TYPES[:term_type])
+        .to eq("termType")
     end
   end
 
-  describe ".entailed_term" do
-    it "creates a termNote with entailedTerm type and target" do
-      note = described_class.entailed_term(target: "c1")
-      expect(note.type).to eq("entailedTerm")
-      expect(note.target).to eq("c1")
-      expect(note.content).to be_nil
-    end
-
-    it "creates a termNote with content" do
-      note = described_class.entailed_term(target: "c2", content: "related term")
-      expect(note.type).to eq("entailedTerm")
-      expect(note.target).to eq("c2")
-      expect(note.content).to eq(["related term"])
-    end
-
-    it "serializes to valid XML" do
-      note = described_class.entailed_term(target: "c1", content: "term text")
-      xml = note.to_xml
-      doc = Nokogiri::XML(xml)
-      expect(doc.errors).to be_empty
-      el = doc.at_xpath("//tbx:termNote", "tbx" => Tbx::Namespace.uri)
-      expect(el["type"]).to eq("entailedTerm")
-      expect(el["target"]).to eq("c1")
-      expect(el.text).to eq("term text")
-    end
-
-    it "serializes without content" do
-      note = described_class.entailed_term(target: "c1")
-      xml = note.to_xml
-      doc = Nokogiri::XML(xml)
-      el = doc.at_xpath("//tbx:termNote", "tbx" => Tbx::Namespace.uri)
-      expect(el["type"]).to eq("entailedTerm")
-      expect(el["target"]).to eq("c1")
-    end
-
-    it "round-trips through XML" do
-      original = described_class.entailed_term(target: "c3", content: "another term")
-      xml = original.to_xml
-      parsed = described_class.from_xml(xml)
-      expect(parsed.type).to eq("entailedTerm")
-      expect(parsed.target).to eq("c3")
-      expect(parsed.content.join).to eq("another term")
+  describe "TYPES completeness" do
+    it "composes all termNote types from Min, Basic, and Linguist" do
+      permitted = %w[
+        administrativeStatus partOfSpeech
+        geographicalUsage grammaticalGender termLocation termType
+        grammaticalNumber register transferComment
+      ]
+      expect(described_class::TYPES.values.sort)
+        .to eq(permitted.sort)
     end
   end
 
   describe "standard termNote creation" do
-    it "creates a usageStatus note" do
-      note = described_class.new(type: described_class::TYPES[:usage_status], content: ["admittedTerm"])
-      expect(note.type).to eq("usageStatus")
-      expect(note.content).to eq(["admittedTerm"])
+    it "creates an administrativeStatus note" do
+      note = described_class.new(
+        type: described_class::TYPES[:administrative_status],
+        content: ["preferredTerm-admn-sts"],
+      )
+      expect(note.type).to eq("administrativeStatus")
+      expect(note.content).to eq(["preferredTerm-admn-sts"])
+    end
+
+    it "creates a partOfSpeech note" do
+      note = described_class.new(
+        type: described_class::TYPES[:part_of_speech],
+        content: ["noun"],
+      )
+      expect(note.type).to eq("partOfSpeech")
+      expect(note.content).to eq(["noun"])
     end
 
     it "creates a termType note" do
-      note = described_class.new(type: described_class::TYPES[:term_type], content: ["fullForm"])
+      note = described_class.new(
+        type: described_class::TYPES[:term_type],
+        content: ["fullForm"],
+      )
       expect(note.type).to eq("termType")
     end
 
     it "creates a grammaticalGender note" do
-      note = described_class.new(type: described_class::TYPES[:grammatical_gender], content: ["masculine"])
+      note = described_class.new(
+        type: described_class::TYPES[:grammatical_gender],
+        content: ["masculine"],
+      )
       expect(note.type).to eq("grammaticalGender")
+    end
+  end
+
+  describe "XML round-trip" do
+    it "round-trips a termNote through XML" do
+      original = described_class.new(
+        type: "partOfSpeech",
+        content: ["verb"],
+      )
+      xml = original.to_xml
+      parsed = described_class.from_xml(xml)
+      expect(parsed.type).to eq("partOfSpeech")
+      expect(parsed.content.join).to eq("verb")
     end
   end
 end
