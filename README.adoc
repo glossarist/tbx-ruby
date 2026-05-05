@@ -1,0 +1,156 @@
+= Ruby library for TBX (ISO 30042:2019)
+
+== Purpose
+
+The `tbx` Ruby gem allows you to parse, manipulate, and serialize TBX
+(TermBase eXchange) documents as defined by ISO 30042:2019.
+
+TBX is an international standard for representing structured terminological
+data in XML. This library provides complete coverage of the TBX core
+structure, including:
+
+* **DCA** (Data Category Archive) style -- standard TBX element names with
+  `type` attributes (e.g., `<descrip type="definition">`)
+* **DCT** (Data Category Tagging) style -- module-namespaced elements
+  (e.g., `<basic:definition>`) *(planned)*
+
+The library is built on https://github.com/lutaml/lutaml-model[`lutaml-model`]
+for declarative XML serialization.
+
+[NOTE]
+This is a work-in-progress.
+
+== Installation
+
+Install the gem and add to the application's Gemfile:
+
+[source,bash]
+----
+bundle add tbx
+----
+
+Or install directly:
+
+[source,bash]
+----
+gem install tbx
+----
+
+== Usage
+
+[source,ruby]
+----
+require 'tbx'
+
+# Parse a TBX file
+doc = IO.read('spec/fixtures/TBX_test_files/min_good.tbx')
+tbx = Tbx::Document.from_xml(doc)
+
+# Access document metadata
+tbx.type          # => "TBX-Min"
+tbx.style         # => "dca"
+tbx.lang          # => "en"
+
+# Access header
+tbx.tbx_header.file_desc.source_desc.p.first.content.join
+# => "TBX file, created via MultiTerm Export"
+
+# Navigate concept entries
+entry = tbx.text.body.concept_entry.first
+entry.id                           # => "c1"
+entry.lang_sec.first.lang          # => "en"
+entry.lang_sec.first.term_sec.first.term.content.join
+# => "open cluster"
+
+# Serialize back to XML
+puts tbx.to_xml(pretty: true)
+# => round-tripped TBX document
+----
+
+=== API
+
+[source,ruby]
+----
+# Parse
+tbx = Tbx::Document.from_xml(xml_string)
+
+# Access elements
+tbx.tbx_header.file_desc.source_desc
+tbx.text.body.concept_entry.each do |entry|
+  entry.lang_sec.each do |lang|
+    lang.term_sec.each do |ts|
+      puts ts.term.content.join
+    end
+  end
+end
+
+# Serialize back
+tbx.to_xml
+tbx.to_xml(pretty: true, declaration: true, encoding: "utf-8")
+----
+
+=== Supported TBX elements
+
+==== Root and structure
+
+`Document` (`<tbx>`), `TbxHeader`, `TextElement`, `Body`, `Back`
+
+==== Terminological entries
+
+`ConceptEntry`, `LangSec`, `TermSec`, `Term`
+
+==== Data categories
+
+`Admin`, `AdminGrp`, `AdminNote`, `Descrip`, `DescripGrp`, `DescripNote`,
+`TermNote`, `TermNoteGrp`, `Ref`, `Xref`
+
+==== Transactions
+
+`Transac`, `TransacGrp`, `TransacNote`, `DateElement`
+
+==== Header
+
+`FileDesc`, `PublicationStmt`, `TitleStmt`, `SourceDesc`, `EncodingDesc`,
+`RevisionDesc`, `Change`
+
+==== Reference objects
+
+`RefObjectSec`, `RefObject`, `ItemSet`, `ItemGrp`, `Item`
+
+==== Inline
+
+`Hi`, `Foreign`, `Ec`, `Sc`, `Ph`, `Note`, `P`, `Title`
+
+== Test data
+
+Test fixtures are sourced from the
+https://github.com/LTAC-Global/TBX_test_files[TBX_test_files] repository
+maintained by https://ltac-global.org[LTAC Global], and from the TBX-Basic
+dialect schemas included in `reference-docs/`.
+
+== Development
+
+After checking out the repo, run `bin/setup` to install dependencies. Then,
+run `bundle exec rake` to run the tests and linter.
+
+[source,bash]
+----
+# Run tests
+bundle exec rspec
+
+# Run linter
+bundle exec rubocop
+
+# Run both (default task)
+bundle exec rake
+----
+
+== Credits
+
+This gem is developed, maintained and funded by
+https://www.ribose.com[Ribose Inc.]
+
+== License
+
+The gem is available as open source under the terms of the
+https://opensource.org/licenses/BSD-2-Clause[2-Clause BSD License].
