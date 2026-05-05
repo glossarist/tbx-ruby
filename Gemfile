@@ -5,7 +5,7 @@ source "https://rubygems.org"
 gemspec
 
 gem "canon"
-gem "lutaml-model", path: "../../lutaml/lutaml-model"
+gem "lutaml-model", github: "lutaml/lutaml-model", branch: "main"
 gem "nokogiri"
 gem "rake", "~> 13.0"
 gem "rspec", "~> 3.0"
